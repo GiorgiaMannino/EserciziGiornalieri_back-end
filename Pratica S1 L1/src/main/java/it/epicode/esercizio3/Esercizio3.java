@@ -2,7 +2,7 @@ package it.epicode.esercizio3;
 // Esercizio 3
 import java.util.Scanner;
 
-public class Main {
+public class Esercizio3 {
     // Metodo per calcolare il perimetro del rettangolo
     public static double calcolaPerimetroRettangolo(double b, double h) {
         return 2 * (b + h);

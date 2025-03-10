@@ -1,7 +1,7 @@
 package it.epicode.esercizio1;
 import java.util.Scanner;
 
-public class Main {
+public class Esercizio1 {
     // Metodo moltiplica
     public static int moltiplica(int a, int b) {
         return a * b;
