@@ -11,14 +11,19 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);  // Inizializzo scanner
-        Auto auto1 = new Auto(0, 0);  // Creo un'istanza di Auto con km e carburante inizializzati a 0
+        Scanner scanner = new Scanner(System.in);
+        Auto auto1 = new Auto(0, 0);
 
         while (true) {
             // Input km percorsi
             System.out.println("Inserisci il numero di km percorsi:");
             try {
-                auto1.setKm(Integer.parseInt(scanner.nextLine()));
+                String inputKm = scanner.nextLine().trim();
+                if (!inputKm.matches("-?\\d+")) {
+                    logger.error("Input non valido. Devi inserire un numero intero.");
+                    continue;
+                }
+                auto1.setKm(Integer.parseInt(inputKm));  // Imposta il valore dei km
             } catch (NumberFormatException e) {
                 logger.error("Input non valido. Devi inserire un numero intero.");
                 continue;
@@ -32,7 +37,12 @@ public class Main {
             // Input litri di carburante consumati
             System.out.println("Inserisci il numero di litri consumati:");
             try {
-                auto1.setCarburanteConsumato(Integer.parseInt(scanner.nextLine()));
+                String inputCarburante = scanner.nextLine().trim();
+                if (!inputCarburante.matches("-?\\d+")) {
+                    logger.error("Input non valido. Devi inserire un numero intero.");
+                    continue;
+                }
+                auto1.setCarburanteConsumato(Integer.parseInt(inputCarburante));  // Imposta il valore del carburante
             } catch (NumberFormatException e) {
                 logger.error("Input non valido. Devi inserire un numero intero.");
                 continue;
@@ -44,11 +54,17 @@ public class Main {
             }
 
             // Calcolo km/litro
-            double kmPerLitro = (double) auto1.getKm() / auto1.getCarburanteConsumato();
-            System.out.println("Il numero di km/litro percorsi è: " + kmPerLitro);
+            try {
+                double kmPerLitro = (double) auto1.getKm() / auto1.getCarburanteConsumato();
+                System.out.println("Il numero di km/litro percorsi è: " + kmPerLitro);
+            } catch (ArithmeticException e) {
+                logger.error("Errore nella divisione per zero: carburante non può essere zero.");
+            }
             break;
         }
 
         scanner.close();
     }
 }
+
+
