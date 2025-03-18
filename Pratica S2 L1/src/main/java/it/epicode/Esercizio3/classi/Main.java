@@ -28,11 +28,13 @@ public class Main {
 
             if (scelta.equalsIgnoreCase("esci")) {
                 System.out.println("Uscita dal programma.");
+                logger.info("L'utente ha terminato il programma.");
                 break;
             }
 
             if (!scelta.equals("1") && !scelta.equals("2")) {
                 System.out.println("Scelta non valida, riprova.");
+                logger.warn("L'utente ha inserito una scelta non valida: {}", scelta);
                 continue;
             }
 
@@ -45,11 +47,12 @@ public class Main {
                 if (scelta.equals("1")) {
                     conto.preleva(importo);
                     System.out.println("Saldo Conto Corrente dopo il prelievo: " + conto.restituisciSaldo());
+                    logger.info("Prelievo di {} effettuato su Conto Corrente. Nuovo saldo: {}", importo, conto.restituisciSaldo());
                 } else {
                     conto1.preleva(importo);
                     System.out.println("Saldo Conto Online dopo il prelievo: " + conto1.restituisciSaldo());
+                    logger.info("Prelievo di {} effettuato su Conto Online. Nuovo saldo: {}", importo, conto1.restituisciSaldo());
                 }
-
             } catch (NumberFormatException e) {
                 System.out.println("Per favore, inserisci un valore numerico valido.");
                 logger.error("Errore di input: valore non numerico inserito", e);
@@ -62,3 +65,4 @@ public class Main {
         scanner.close();
     }
 }
+
