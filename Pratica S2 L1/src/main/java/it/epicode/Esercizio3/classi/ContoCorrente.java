@@ -22,9 +22,9 @@ public class ContoCorrente {
     // Metodo per prelevare denaro
     public void preleva(double x) throws BancaException {
         if (nMovimenti < maxMovimenti)
-            saldo -= x;
+            saldo = saldo - x;
         else
-            saldo -= (x + 0.50);
+            saldo = saldo - x - 0.5;
 
         nMovimenti++;
 
