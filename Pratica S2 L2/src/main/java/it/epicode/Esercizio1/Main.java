@@ -7,12 +7,32 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
 
-        Set<Integer> set = new HashSet<Integer>();
+        Scanner scanner = new Scanner(System.in);
+        Set<String> parole = new HashSet<>();
+        Set<String> paroleDuplicate = new HashSet<>();
+        System.out.println("Inserisci il numero di parole da scrivere");
 
-        // chiedo all'utente di inserire il numero di elementi da inserire
-        int N = new Scanner(System.in).nextInt();
-        for (int i = 0; i < N; i++) {
-            set.add(new Scanner(System.in).nextInt());
+        try {
+            int n = scanner.nextInt();
+
+            for (int i = 0; i < n; i++) {
+                System.out.println("Inserisci la parola");
+                String parola = scanner.next();
+                if (!parole.add(parola)) {  // se la parola non è aggiunta, è duplicata
+                    paroleDuplicate.add(parola);
+                }
+            }
+
+            System.out.println("Parole duplicate: " + paroleDuplicate);
+
+            System.out.println("Numero parole distinte: " + parole.size());
+
+            System.out.println("Le parole distinte sono: " + parole);
+
+        } catch (Exception e) {
+            System.out.println("Inserisci un numero valido");
         }
+
+        scanner.close();
     }
 }
