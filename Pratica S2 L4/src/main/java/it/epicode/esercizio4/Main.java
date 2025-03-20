@@ -13,12 +13,12 @@ public class Main {
 
         List<Order> ordini = EcommerceData.getOrdini();
 
-        // Calcolo dell'importo totale per ogni ordine e uso summaryStatistics per raccogliere le statistiche
+        // Calcolo dell'importo totale per ogni ordine
         DoubleSummaryStatistics statistiche = ordini.stream()
-                .mapToDouble(order -> order.getProducts().stream() // Itero sui prodotti dell'ordine
+                .mapToDouble(order -> order.getProducts().stream()
                         .mapToDouble(Product::getPrice) // Ottengo il prezzo di ciascun prodotto
                         .sum()) // Sommo i prezzi dei prodotti per ogni ordine
-                .summaryStatistics(); // Raccolgo le statistiche (min, max, media, somma, conteggio)
+                .summaryStatistics();
 
         System.out.println("Importo totale degli ordini: " + statistiche.getSum());
         System.out.println("Media degli importi degli ordini: " + statistiche.getAverage());

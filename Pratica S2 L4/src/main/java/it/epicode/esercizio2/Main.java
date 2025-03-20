@@ -28,7 +28,7 @@ public class Main {
         venditePerCliente.forEach((cliente, totale) -> {
             System.out.println("Cliente: " + cliente.getName() + " (ID: " + cliente.getId() + ")");
             System.out.println("Totale vendite: €" + totale);
-            System.out.println(); // Riga vuota per leggibilità
+            System.out.println();
         });
     }
 }
