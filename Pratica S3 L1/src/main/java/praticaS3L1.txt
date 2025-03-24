@@ -1,0 +1,21 @@
+select * from clienti where nome='Mario';
+
+select cognome,nome from clienti where anno_nascita=1982;
+
+select count(*) from fatture where iva = 20;
+
+select * from prodotti where (in_produzione=true or  in_commercio=true) and extract(year from data_attivazione) = 2017;
+
+select * from fatture join clienti on fatture.id_cliente = clienti.numero_cliente where fatture.importo<1000;
+
+select numero_fattura, importo, data_fattura, iva, denominazione from fatture join fornitori using(numero_fornitore);
+
+select extract(year from data_fattura) as anno_fattura, count(*) from fatture where iva=20 group by extract(year from data_fattura);
+
+select count(*) , sum(importo) ,extract(year from data_fattura) as anno_fatturazione from fatture group by anno_fatturazione ;
+
+select extract(year from data_fattura) as anno_fatturazione, count(*) as fatture_emesse from fatture where tipologia='A' group by anno_fatturazione having count(*)>2;
+
+select regione_residenza, sum(importo), '€' as valuta from clienti full outer join fatture on fatture.id_cliente = clienti.numero_cliente group by regione_residenza;
+
+select count(*)  from clienti join fatture on fatture.id_cliente = clienti.numero_cliente where clienti.anno_nascita = 1980 and importo>50;
