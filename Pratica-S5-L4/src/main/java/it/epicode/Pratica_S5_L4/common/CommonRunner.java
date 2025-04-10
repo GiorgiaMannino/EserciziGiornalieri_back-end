@@ -9,10 +9,11 @@ import it.epicode.Pratica_S5_L4.tavoli.TavoloService;
 import it.epicode.Pratica_S5_L4.toppings.ToppingService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CommonRunner {
+public class CommonRunner implements CommandLineRunner {
 
     @Autowired
     private PizzaService pizzaService;
@@ -30,6 +31,8 @@ public class CommonRunner {
     @Autowired
     private Ordine ordine;
 
+
+    @Override
     @Transactional
     public void run(String... args) throws Exception {
         pizzaService.createData();

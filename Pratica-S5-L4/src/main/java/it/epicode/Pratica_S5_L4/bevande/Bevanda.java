@@ -4,12 +4,13 @@ import it.epicode.Pratica_S5_L4.menu.ElementoMenu;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Bevanda extends ElementoMenu {
 
     public Bevanda( String nome, String descrizione, double prezzo, int calorie) {

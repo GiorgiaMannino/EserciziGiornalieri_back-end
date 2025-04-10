@@ -5,13 +5,14 @@ import it.epicode.Pratica_S5_L4.menu.ElementoMenu;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = true)
 public class Topping extends ElementoMenu {
 
     public Topping(String nome, String descrizione, double prezzo, int calorie) {

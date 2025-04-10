@@ -6,32 +6,21 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
-@AllArgsConstructor
 @NoArgsConstructor
-@Table (name = "ordini")
+@Entity
+@Table(name = "ordini")
 public class Ordine {
-
     @Id
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column (length = 100, nullable = false)
-    private int numeroOrdine;
-
-    private StatoOrdine statoOrdine;
-
     private int coperti;
-
-    private LocalTime oraOrdine;
-
-
     @ManyToOne
     private Tavolo tavolo;
 
