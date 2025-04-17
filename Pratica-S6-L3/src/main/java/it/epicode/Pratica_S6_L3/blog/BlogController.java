@@ -27,7 +27,7 @@ public class BlogController {
 
     // get lista di blog--> PAGE
     @GetMapping
-    public Page<BlogResponse> findAll(Pageable pageable) {
+    public Page<BlogResponse> findAll(@ParameterObject Pageable pageable) {
         return blogService.findAll(pageable);
     }
 

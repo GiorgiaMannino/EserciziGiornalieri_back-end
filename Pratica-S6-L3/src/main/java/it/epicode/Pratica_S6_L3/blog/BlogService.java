@@ -20,15 +20,17 @@ public class BlogService {
     @Autowired
     private AutoreRepository autoreRepository;
 
-    // find all
+    // find all - page
     public Page<BlogResponse> findAll(Pageable pageable) {
-        return blogRepository.findAll(pageable)
-                .map(this::fromEntity);
+        Page<Blog> blogPage = blogRepository.findAll(pageable);
+        return blogPage.map(this::toResponse);
+
     }
 
-    public BlogResponse fromEntity(Blog blog) {
+    public BlogResponse toResponse(Blog blog) {
         BlogResponse response = new BlogResponse();
         BeanUtils.copyProperties(blog, response);
+        response.setAutoreId(blog.getAutore().getId());
         return response;
     }
 
@@ -40,9 +42,10 @@ public class BlogService {
                 blog.getId(),
                 blog.getCategoria(),
                 blog.getTitolo(),
-                blog.getAutore().getNome() + " " + blog.getAutore().getCognome()
+                blog.getAutore().getId()
         );
     }
+
 
     // save
     public BlogResponse save(@Valid BlogRequest blogRequest) {
@@ -63,7 +66,7 @@ public class BlogService {
                 blog.getId(),
                 blog.getCategoria(),
                 blog.getTitolo(),
-                blog.getAutore().getNome() + " " + blog.getAutore().getCognome()
+                blog.getAutore().getId()
         );
     }
 
@@ -84,13 +87,15 @@ public class BlogService {
 
         blogRepository.save(blog);
 
+        // Restituisci solo i parametri corretti
         return new BlogResponse(
                 blog.getId(),
                 blog.getCategoria(),
                 blog.getTitolo(),
-                blog.getAutore().getNome() + " " + blog.getAutore().getCognome()
+                blog.getAutore().getId()
         );
     }
+
 
     // delete
     public void deleteById(Long id) {
