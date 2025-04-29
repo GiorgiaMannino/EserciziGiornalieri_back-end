@@ -16,8 +16,8 @@ public class Dipendente {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(length = 50, unique = true)
-    private String username;
+    @OneToOne(cascade={CascadeType.REMOVE, CascadeType.PERSIST})
+    private AppUser appUser;
 
     @Column(length = 50)
     private String nome;
@@ -30,6 +30,4 @@ public class Dipendente {
 
     private String immagineProfilo;
 
-    @OneToOne(cascade={CascadeType.REMOVE, CascadeType.PERSIST})
-    private AppUser appUser;
 }

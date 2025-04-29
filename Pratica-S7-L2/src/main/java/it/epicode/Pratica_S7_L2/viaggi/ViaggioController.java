@@ -1,15 +1,12 @@
 package it.epicode.Pratica_S7_L2.viaggi;
 
 
-
-import it.epicode.Pratica_S7_L2.auth.AppUser;
 import it.epicode.Pratica_S7_L2.common.CommonResponse;
 import it.epicode.Pratica_S7_L2.prenotazioni.PrenotazioneService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,8 +46,8 @@ public class ViaggioController {
 
     // put modifico viaggio con id
     @PutMapping("/{id}")
-    public ViaggioResponse update(@PathVariable Long id, @RequestBody ViaggioRequest request, @AuthenticationPrincipal AppUser utenteLoggato) {
-        return viaggioService.update(id, request, utenteLoggato);
+    public ViaggioResponse update(@PathVariable Long id, @RequestBody ViaggioRequest request) {
+        return viaggioService.update(id, request);
     }
 
     // delete elimino viaggio con id
@@ -65,11 +62,9 @@ public class ViaggioController {
 
     // patch aggiorno lo stato del viaggio
     @PatchMapping("/{id}/stato")
-    public ViaggioResponse updateStato(@PathVariable Long id, @RequestParam StatoViaggio stato,
-                                       @AuthenticationPrincipal AppUser utenteLoggato) {
-        viaggioService.aggiornaStato(id, stato, utenteLoggato);
+    public ViaggioResponse updateStato(@PathVariable Long id, @RequestParam StatoViaggio stato) {
+        viaggioService.aggiornaStato(id, stato);
         return viaggioService.findById(id);
     }
-
 
 }

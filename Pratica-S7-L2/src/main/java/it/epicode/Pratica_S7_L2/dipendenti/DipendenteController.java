@@ -46,7 +46,7 @@ public class DipendenteController {
 
     // put modifico dipendente con id
     @PutMapping("/{id}")
-    public DipendenteResponse update(@PathVariable Long id, @RequestBody @Valid DipendenteRequest request,  @AuthenticationPrincipal AppUser utenteLoggato) {
+    public DipendenteResponse update(@PathVariable Long id, @RequestBody DipendenteRequest request,  @AuthenticationPrincipal AppUser utenteLoggato) {
         return dipendenteService.update(id, request, utenteLoggato);
     }
 

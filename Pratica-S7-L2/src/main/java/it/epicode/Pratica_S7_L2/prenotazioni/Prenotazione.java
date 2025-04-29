@@ -1,7 +1,6 @@
 package it.epicode.Pratica_S7_L2.prenotazioni;
 
 
-import it.epicode.Pratica_S7_L2.auth.AppUser;
 import it.epicode.Pratica_S7_L2.dipendenti.Dipendente;
 import it.epicode.Pratica_S7_L2.viaggi.Viaggio;
 import jakarta.persistence.*;
@@ -31,5 +30,4 @@ public class Prenotazione {
 
     @Column(length = 200)
     private String preferenze;
-
 }

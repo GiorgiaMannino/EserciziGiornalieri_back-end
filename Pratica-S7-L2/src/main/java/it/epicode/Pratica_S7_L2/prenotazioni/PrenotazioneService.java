@@ -1,7 +1,5 @@
 package it.epicode.Pratica_S7_L2.prenotazioni;
 
-import it.epicode.Pratica_S7_L2.auth.AppUser;
-import it.epicode.Pratica_S7_L2.auth.Role;
 import it.epicode.Pratica_S7_L2.dipendenti.DipendenteService;
 import it.epicode.Pratica_S7_L2.viaggi.ViaggioService;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,7 +28,7 @@ public class PrenotazioneService {
                 .map(p -> new PrenotazioneResponse(
                         p.getId(),
                         p.getViaggio().getDestinazione(),
-                        p.getDipendente().getUsername(),
+                        p.getDipendente().getAppUser().getUsername(),
                         p.getDataRichiesta(),
                         p.getPreferenze()))
                 .toList();
@@ -42,7 +40,7 @@ public class PrenotazioneService {
         return new PrenotazioneResponse(
                 p.getId(),
                 p.getViaggio().getDestinazione(),
-                p.getDipendente().getUsername(),
+                p.getDipendente().getAppUser().getUsername(),
                 p.getDataRichiesta(),
                 p.getPreferenze());
     }
@@ -63,7 +61,7 @@ public class PrenotazioneService {
         return new PrenotazioneResponse(
                 p.getId(),
                 p.getViaggio().getDestinazione(),
-                p.getDipendente().getUsername(),
+                p.getDipendente().getAppUser().getUsername(),
                 p.getDataRichiesta(),
                 p.getPreferenze());
     }
@@ -74,36 +72,31 @@ public class PrenotazioneService {
         prenotazioneRepository.delete(p);
     }
 
-
-    public PrenotazioneResponse update(Long id, @Valid PrenotazioneRequest request, AppUser utenteLoggato) {
+    public PrenotazioneResponse update(Long id, @Valid PrenotazioneRequest request) {
         Prenotazione p = prenotazioneRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Prenotazione con id " + id + " non trovata"));
 
-        // Verifica se l'utente è un admin o il proprietario della prenotazione
-        boolean isAuthorized = utenteLoggato.getRoles().contains(Role.ROLE_ADMIN) ||
-                p.getDipendente().getAppUser().getId().equals(utenteLoggato.getId());
-        if (!isAuthorized) {
-            throw new IllegalArgumentException("Non sei autorizzato a modificare questa prenotazione");
-        }
-        // Verifica se la data richiesta è già prenotata da un altro dipendente
-        if (prenotazioneRepository.existsByDipendenteIdAndDataRichiesta(request.getDipendenteId(), request.getDataRichiesta()) &&
-                !p.getDipendente().getId().equals(request.getDipendenteId()) &&
-                !p.getDataRichiesta().equals(request.getDataRichiesta())) {
+        boolean alreadyBooked = prenotazioneRepository.existsByDipendenteIdAndDataRichiesta(
+                request.getDipendenteId(), request.getDataRichiesta());
+        boolean isSameDipendente = p.getDipendente().getId().equals(request.getDipendenteId());
+        boolean isSameData = p.getDataRichiesta().equals(request.getDataRichiesta());
+
+        if (alreadyBooked && !(isSameDipendente && isSameData)) {
             throw new IllegalStateException("Dipendente già prenotato per quella data");
         }
-        // Aggiornamento dei dati della prenotazione
+
         p.setViaggio(viaggioService.getEntityById(request.getViaggioId()));
         p.setDipendente(dipendenteService.getEntityById(request.getDipendenteId()));
         p.setDataRichiesta(request.getDataRichiesta());
         p.setPreferenze(request.getPreferenze());
+
         prenotazioneRepository.save(p);
 
         return new PrenotazioneResponse(
                 p.getId(),
                 p.getViaggio().getDestinazione(),
-                p.getDipendente().getUsername(),
+                p.getDipendente().getAppUser().getUsername(),
                 p.getDataRichiesta(),
                 p.getPreferenze());
     }
-
 }

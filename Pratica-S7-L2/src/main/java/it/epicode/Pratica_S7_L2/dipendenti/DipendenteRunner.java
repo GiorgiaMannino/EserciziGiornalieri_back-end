@@ -21,7 +21,6 @@ public class DipendenteRunner implements CommandLineRunner {
         for (int i = 0; i < 10; i++) {
             Dipendente d = new Dipendente();
             String username = faker.name().username() + i;
-            d.setUsername(username);
             d.setNome(faker.name().firstName());
             d.setCognome(faker.name().lastName());
             d.setEmail(faker.internet().emailAddress());

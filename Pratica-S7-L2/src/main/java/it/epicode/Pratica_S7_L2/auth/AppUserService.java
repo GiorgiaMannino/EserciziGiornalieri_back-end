@@ -1,7 +1,10 @@
 package it.epicode.Pratica_S7_L2.auth;
 
+import it.epicode.Pratica_S7_L2.dipendenti.Dipendente;
+import it.epicode.Pratica_S7_L2.dipendenti.DipendenteRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +19,11 @@ import java.util.Set;
 
 @Service
 public class AppUserService {
-
     @Autowired
     private AppUserRepository appUserRepository;
+
+    @Autowired
+    private DipendenteRepository dipendenteRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -29,16 +34,25 @@ public class AppUserService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    public AppUser registerUser(String username, String password, Set<Role> roles) {
-        if (appUserRepository.existsByUsername(username)) {
+    public AppUser registerUser(RegisterRequest request, Set<Role> roles) {
+        if (appUserRepository.existsByUsername(request.getUsername())) {
             throw new EntityExistsException("Username già in uso");
         }
 
         AppUser appUser = new AppUser();
-        appUser.setUsername(username);
-        appUser.setPassword(passwordEncoder.encode(password));
+        appUser.setUsername(request.getUsername());
+        appUser.setPassword(passwordEncoder.encode(request.getPassword()));
         appUser.setRoles(roles);
-        return appUserRepository.save(appUser);
+
+        Dipendente dipendente = new Dipendente();
+        BeanUtils.copyProperties(request, dipendente);
+
+        dipendente.setAppUser(appUser);
+        dipendenteRepository.save(dipendente);
+
+        return appUser;
+
+
     }
 
     public Optional<AppUser> findByUsername(String username) {
@@ -61,7 +75,7 @@ public class AppUserService {
 
     public AppUser loadUserByUsername(String username)  {
         AppUser appUser = appUserRepository.findByUsername(username)
-            .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con username: " + username));
+                .orElseThrow(() -> new EntityNotFoundException("Utente non trovato con username: " + username));
 
 
         return appUser;

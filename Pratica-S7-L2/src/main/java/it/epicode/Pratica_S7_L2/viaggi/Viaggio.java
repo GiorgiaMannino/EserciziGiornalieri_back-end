@@ -1,6 +1,5 @@
 package it.epicode.Pratica_S7_L2.viaggi;
 
-import it.epicode.Pratica_S7_L2.auth.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,8 +24,4 @@ public class Viaggio {
 
     @Enumerated(EnumType.STRING)
     private StatoViaggio stato;
-
-    @OneToOne(cascade={CascadeType.REMOVE, CascadeType.PERSIST})
-    private AppUser appUser;
-
 }

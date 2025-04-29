@@ -1,13 +1,11 @@
 package it.epicode.Pratica_S7_L2.prenotazioni;
 
 
-import it.epicode.Pratica_S7_L2.auth.AppUser;
 import it.epicode.Pratica_S7_L2.common.CommonResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,12 +42,9 @@ public class PrenotazioneController {
 
     // put modifica prenotazione
     @PutMapping("/{id}")
-    public PrenotazioneResponse update(@PathVariable Long id,
-                                       @RequestBody @Valid PrenotazioneRequest request,
-                                       @AuthenticationPrincipal AppUser utenteLoggato) {
-        return prenotazioneService.update(id, request, utenteLoggato);
+    public PrenotazioneResponse update(@PathVariable Long id, @RequestBody @Valid PrenotazioneRequest request) {
+        return prenotazioneService.update(id, request);
     }
-
 
 
     // delete elimino prenotazione con id

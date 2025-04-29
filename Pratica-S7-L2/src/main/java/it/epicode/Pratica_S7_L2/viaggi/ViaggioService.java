@@ -1,13 +1,9 @@
 package it.epicode.Pratica_S7_L2.viaggi;
 
-
-import it.epicode.Pratica_S7_L2.auth.AppUser;
-import it.epicode.Pratica_S7_L2.auth.Role;
 import it.epicode.Pratica_S7_L2.prenotazioni.PrenotazioneRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -59,22 +55,13 @@ public class ViaggioService {
                 viaggio.getStato());
     }
 
-    public ViaggioResponse update(Long id, @Valid ViaggioRequest request, AppUser utenteLoggato) {
+    public ViaggioResponse update(Long id, @Valid ViaggioRequest request) {
         Viaggio viaggio = viaggioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Viaggio non trovato con id: " + id));
 
-        // se volessi abilitare anche l'utente amministratore a modificare qualsiasi viaggio
-        // posso controllare il ruolo dell'utente loggato per verificare che sia un admin
-        boolean isAdmin = utenteLoggato.getRoles().contains(Role.ROLE_ADMIN);
-
-        // consento la modifica solo se l'utente loggato è il proprietario del viaggio
-        // oppure se è un amministratore
-        if (viaggio.getAppUser().getId().equals(utenteLoggato.getId()) || isAdmin) {
-            // uso BeanUtils per copiare automaticamente i dati dalla request all'entità
-            BeanUtils.copyProperties(request, viaggio);
-        } else {
-            throw new IllegalArgumentException("Non sei autorizzato a modificare questo viaggio");
-        }
+        viaggio.setDestinazione(request.getDestinazione());
+        viaggio.setData(request.getData());
+        viaggio.setStato(request.getStato());
 
         viaggioRepository.save(viaggio);
 
@@ -94,20 +81,13 @@ public class ViaggioService {
         viaggioRepository.delete(viaggio);
     }
 
-    public void aggiornaStato(Long id, StatoViaggio stato, AppUser utenteLoggato) {
+    public void aggiornaStato(Long id, StatoViaggio stato) {
         Viaggio viaggio = viaggioRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Viaggio non trovato con id: " + id));
 
-        boolean isAdmin = utenteLoggato.getRoles().contains(Role.ROLE_ADMIN);
-
-        if (viaggio.getAppUser().getId().equals(utenteLoggato.getId()) || isAdmin) {
-            viaggio.setStato(stato);
-            viaggioRepository.save(viaggio);
-        } else {
-            throw new IllegalArgumentException("Non sei autorizzato a modificare questo viaggio");
-        }
+        viaggio.setStato(stato);
+        viaggioRepository.save(viaggio);
     }
-
 
     public Viaggio getEntityById(Long id) {
         return viaggioRepository.findById(id)

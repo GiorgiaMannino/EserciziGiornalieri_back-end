@@ -1,33 +1,37 @@
 package it.epicode.Pratica_S7_L2.auth;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j // logging con Lombok
 public class AuthController {
 
     private final AppUserService appUserService;
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/current-user")
+    public AppUser getCurrentUser(@AuthenticationPrincipal AppUser appUser) {
+        return appUser;
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        appUserService.registerUser(
-                registerRequest.getUsername(),
-                registerRequest.getPassword(),
-                Set.of(Role.ROLE_USER) // Assegna il ruolo di default
-        );
+        appUserService.registerUser(registerRequest, Set.of(Role.ROLE_USER));
         return ResponseEntity.ok("Registrazione avvenuta con successo");
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+        log.info("Login request: {}", loginRequest.getUsername());
         String token = appUserService.authenticateUser(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()
